@@ -71,23 +71,19 @@ class TradingStrategy
   end
 
   def trade_quantity
-    105
+    100
   end
 
   def calculate_spread(price)
     [
-      price - price * 0.15,
-      price - price * 0.1,
       price - price * 0.05,
       price,
       price + price * 0.05,
-      price + price * 0.1,
-      price + price * 0.15,
     ].map &:to_i
   end
 
   ###
-  # May want to throttle this back to orders with zero fills
+  # TODO: May want to throttle this back to orders with zero fills
   def cancel_outstanding_orders!
     open_orders = Stockfighter::Order.all_open
     logvisible "Canceling #{open_orders.size} orders...", sep: '', text: { color: :red }
@@ -268,7 +264,6 @@ class LevelRunner
 
   def monitor_executions
     Stockfighter::ExecutionTape.new.start do |order|
-      puts "order: #{order}"
       work_queue.push order
     end
   end
